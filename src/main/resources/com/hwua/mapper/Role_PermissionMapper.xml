@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:命名空间+id来找到唯一的一条sql语句-->
+<mapper namespace="com.hwua.mapper.Role_PermissionMapper">
+<!--    添加-->
+    <insert id="addRole_Permission">
+        insert into role_permission(permissionId,roleId) values
+        <foreach collection="permissionid" item="perid" separator="," >
+        (#{perid},#{roleid})
+        </foreach>
+    </insert>
+
+</mapper>

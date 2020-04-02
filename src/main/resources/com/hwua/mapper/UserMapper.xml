@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:命名空间+id来找到唯一的一条sql语句-->
+<mapper namespace="com.hwua.mapper.UserMapper">
+<!--    查询所有用户-->
+    <select id="queryAllUser" resultMap="findalluser" >
+        select id,email,username,password,phoneNum,status from users
+    </select>
+
+
+    <resultMap id="findalluser"  type="com.hwua.pojo.User" >
+        <result property="id" column="id"></result>
+        <collection property="roles" column="id" select="com.hwua.mapper.RoleMapper.queryRoleByUserId"></collection>
+    </resultMap>
+
+
+<!--    根据账号密码查询用户-->
+    <select id="queryUserByUser" resultType="com.hwua.pojo.User" >
+        select id,email,username,password,phoneNum,status from users where username=#{username}  and password = #{password}
+    </select>
+
+<!--    注册用户-->
+    <insert id="registerUser" parameterType="com.hwua.pojo.User">
+        insert into users(id,email,username,password,phoneNum,status) values(UUID(),#{email},#{username},#{password},#{phoneNum},#{status})
+    </insert>
+
+    <select id="queryUserByName" resultType="com.hwua.pojo.User">
+        select id,email,username,password,phoneNum,status from users where username = #{name}
+    </select>
+
+    <select id="queryUserById" resultMap="queryUserById">
+      select id,email,username,password,phoneNum,status from users where id = #{id}
+    </select>
+    <resultMap id="queryUserById"  type="com.hwua.pojo.User" >
+        <result property="id" column="id"></result>
+        <collection property="roles" column="id" select="com.hwua.mapper.RoleMapper.queryRoleByUserId">
+            <result property="id" column="id"></result>
+        </collection>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:命名空间+id来找到唯一的一条sql语句-->
+<mapper namespace="com.hwua.mapper.User_roleMapper">
+<!--    <insert id="insertUser_RoleByUserId">-->
+<!--        insert into users_role {roleId} values-->
+<!--        <foreach collection="roleid" item="role" separator="," open="" close="">(#{role})</foreach>-->
+<!--        where userId=#{userid}-->
+<!--    </insert>-->
+
+
+
+    <insert id="insertUser_RoleByUserId" >
+        insert into users_role(userid,roleid)
+        values
+        <foreach collection="roleid" item="role" index="index" separator=",">
+            (#{userid},#{role})
+        </foreach>
+    </insert>
+
+</mapper>

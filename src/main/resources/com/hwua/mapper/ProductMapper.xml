@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:命名空间+id来找到唯一的一条sql语句-->
+<mapper namespace="com.hwua.mapper.ProductMapper">
+<!--    查询所有产品-->
+    <select id="queryAllProduct" resultType="com.hwua.pojo.Product" >
+        select id,productNum,productName,cityName,departureTime,productPrice,productDesc,productStatus from product
+    </select>
+
+<!--    根据产品的id来查找对应的产品-->
+    <select id="queryProductById" resultType="com.hwua.pojo.Product" >
+        select id,productNum,productName,cityName,departureTime,productPrice,productDesc,productStatus from product  where id= #{_parameter}
+    </select>
+
+<!--    添加产品-->
+    <insert id="addProduct">
+        insert into product (id,productNum,productName,cityName,departureTime,productPrice,productDesc,productStatus)
+        values
+        (UUID(),#{productNum},#{productName},#{cityName},#{departureTime},#{productPrice},#{productDesc},#{productStatus})
+    </insert>
+
+
+<!--根据id改变产品的上/下架状态-->
+    <update id="updateProducStatustById">
+        update product set  productStatus=#{status}  <where> id in (
+        <foreach collection="idlist" item="id" separator="," open="" close="">
+            #{id}
+        </foreach>
+        )
+    </where>
+    </update>
+
+<!--    根据id删除商品-->
+    <delete id="deleteProductById">
+        delete from  product  where id in (
+        <foreach collection="idlist" separator="," item="ids" open="" close="">#{ids}
+        </foreach>
+            )
+    </delete>
+</mapper>

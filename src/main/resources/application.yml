@@ -1,0 +1,111 @@
+spring:
+  aop:
+    proxy-target-class: true
+    auto: true
+  datasource:
+    druid:
+      name: frank
+      # �������ݿ��url����ͬ���ݿⲻһ�������磺
+      # mysql : jdbc:mysql://ip:port/database
+      # oracle : jdbc:oracle:thin:@ip:port:database
+      url: jdbc:mysql://localhost:3306/crm?serverTimezone=UTC
+      # �������ݿ���û���
+      username: root
+      # �������ݿ���û����룬����㲻ϣ������ֱ��д�������ļ��У�����ʹ��ConfigFilter��
+      password: 123456
+      # ����������url�Զ�ʶ����һ�����ɲ��䣬���������druid�����url�Զ�ʶ��dbType��Ȼ��ѡ����Ӧ��driverClassName(����������)
+      driver-class-name: com.mysql.jdbc.Driver
+      # ���ݿ�����
+      db-type: com.alibaba.druid.pool.DruidDataSource
+      # ��ʼ��ʱ�����������ӵĸ�������ʼ����������ʾ����init���������ߵ�һ��getConnectionʱ��ȱʡֵ��0��
+      initialSize: 1
+      # ������ӳ�������ȱʡֵ��8��
+      maxActive: 20
+      # ��С���ӳ�����
+      minIdle: 1
+      # ��ȡ����ʱ���ȴ�ʱ�䣬��λ���롣������maxWait֮��ȱʡ���ù�ƽ��������Ч�ʻ������½��������Ҫ����ͨ������useUnfairLock����Ϊtrueʹ�÷ǹ�ƽ����
+      maxWait: 60000
+      # �Ƿ񻺴�preparedStatement��Ҳ����PSCache��PSCache��֧���α�����ݿ����������޴󣬱���˵oracle����mysql�½���رա�(ȱʡֵ��false)
+      pool-prepared-statements: false
+      # Ҫ����PSCache���������ô���0��������0ʱ��poolPreparedStatements�Զ������޸�Ϊtrue����Druid�У��������Oracle��PSCacheռ���ڴ��������⣬���԰������ֵ���ô�һЩ������˵100
+      max-open-prepared-statements: -1
+      # ������������Ƿ���Ч��sql��Ҫ����һ����ѯ��䡣���validationQueryΪnull��testOnBorrow��testOnReturn��testWhileIdle�����������á�
+      validationQuery: select 'x'
+      # ��������ʱִ��validationQuery��������Ƿ���Ч������������ûή�����ܡ�
+      testOnBorrow: false
+      # �黹����ʱִ��validationQuery��������Ƿ���Ч������������ûή������
+      testOnReturn: false
+      # ��������Ϊtrue����Ӱ�����ܣ����ұ�֤��ȫ�ԡ��������ӵ�ʱ���⣬�������ʱ�����timeBetweenEvictionRunsMillis��ִ��validationQuery��������Ƿ���Ч��
+      testWhileIdle: true
+      # 1) Destroy�̻߳������ӵļ��ʱ��2) testWhileIdle���ж����ݣ���ϸ��testWhileIdle���Ե�˵��
+      timeBetweenEvictionRunsMillis: 60000
+      # ����һ�������ڳ�����С�����ʱ�䣬��λ�Ǻ���
+      minEvictableIdleTimeMillis: 300000
+      # �������ӳ�ʼ����ʱ��ִ�е�sql
+      connectionInitSqls: select 1 from dual
+      # �����������ַ�����ͨ�������ķ�ʽ������չ��������õĲ���У� ���ͳ���õ�filter:stat��־�õ�filter:log4j����sqlע���filter:wall
+      filters: stat, wall
+      filter:
+        # ���ͳ��
+        stat:
+          # ���ݿ�����
+          db-type: mysql
+          # ��SQL
+          log-slow-sql: true
+          # ��SQLִ��ʱ��
+          slow-sql-millis: 2000
+        wall:
+          enabled: true
+          db-type: mysql
+          config:
+            delete-allow: false
+            drop-table-allow: false
+
+      # statViewServlet���ã�˵�����òο�druid wiki
+      stat-view-servlet:
+        # �Ƿ�����statViewServlet����
+        enabled: true
+        # ���ʼ��ҳ��
+        url-pattern: "/druid/*"
+        # ��ֹ�ֶ����ü������
+        reset-enable: false
+        # ���ü��ҳ��ĵ�½��
+        login-username: admin
+        # ���ü��ҳ��ĵ�½����
+        login-password: admin
+
+      #WebStatFilter���ã�˵����ο�Druid Wiki������_����WebStatFilter
+      web-stat-filter:
+        # �Ƿ�����WebStatFilter
+        enabled: true
+        # ����·��
+        url-pattern: "/*"
+        # �ų�����Ҫ��url
+        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+        # ������session����Ĭ����1000
+        session-stat-max-count: 1000
+        # �Ƿ�����session��ͳ�ƹ���
+        session-stat-enable: true
+        # �Ƿ����ü�ص���Url���õ�sql�б�
+        profile-enable: true
+        # ʹdruid��ǰsession���û���˭��session_user_key���㱣�浽session�е�sessionName
+        principalSessionName: session_user_key
+        # ʹdruidֻ����ǰ��user��˭,cookie_user_key���㱣����cookie�е�cookieName
+        principalCookieName: cookie_user_key
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+    view:
+      prefix: /
+      suffix: .jsp
+mybatis:
+  mapper-locations:  classpath:com/hwua/mapper/*.xml
+  type-aliases-package:  com.hwua.pojo
+  configuration:
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+    map-underscore-to-camel-case: true
+pagehelper:
+  reasonable: true
+  auto-dialect: mysql

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:命名空间+id来找到唯一的一条sql语句-->
+<mapper namespace="com.hwua.mapper.OrderMapper">
+<!--    查询所有订单-->
+<!--    <select id="queryAllOrder" resultType="com.hwua.pojo.Order" >-->
+    <select id="queryAllOrder" resultMap="queryAllOrderMap" >
+        select id,orderNum,orderTime,peopleCount,orderDesc,payType,orderStatus,productId,memberId from orders
+    </select>
+<!--    根据产品id查询订单-->
+
+    <select id="queryOrderByProductId" resultMap="queryAllOrderMap" >
+        select id,orderNum,orderTime,peopleCount,orderDesc,payType,orderStatus,productId,memberId from orders  where productId=#{id}
+    </select>
+
+    <resultMap id="queryAllOrderMap" type="com.hwua.pojo.Order">
+        <id property="id" column="id"></id>
+        <result property="orderNum" column="orderNum"></result>
+        <result property="orderTime" column="orderTime"></result>
+        <result property="peopleCount" column="peopleCount"></result>
+        <result property="orderDesc" column="orderDesc"></result>
+        <result property="payType" column="payType"></result>
+        <result property="orderStatus" column="orderStatus"></result>
+        <result property="productId" column="productId"></result>
+        <result property="memberId" column="memberId"></result>
+        <association property="product" javaType="com.hwua.pojo.Product"
+                     select="com.hwua.mapper.ProductMapper.queryProductById"  column= "productId" >
+        </association>
+    </resultMap>
+
+    <select id="queryOrderDetailMessageByOrdertId" resultMap="queryOrderDetailMessageByOrdertId">
+        select id,orderNum,orderTime,peopleCount,orderDesc,payType,orderStatus,productId,memberId from orders  where productId=#{id}
+    </select>
+
+    <resultMap id="queryOrderDetailMessageByOrdertId" type="com.hwua.pojo.Order">
+        <id property="id" column="id"></id>
+        <result property="orderNum" column="orderNum"></result>
+        <result property="orderTime" column="orderTime"></result>
+        <result property="peopleCount" column="peopleCount"></result>
+        <result property="orderDesc" column="orderDesc"></result>
+        <result property="payType" column="payType"></result>
+        <result property="orderStatus" column="orderStatus"></result>
+        <result property="productId" column="productId"></result>
+        <result property="memberId" column="memberId"></result>
+        <association property="product" javaType="com.hwua.pojo.Product"
+                     select="com.hwua.mapper.ProductMapper.queryProductById"  column= "productId" >
+        </association>
+        <association property="member" javaType="com.hwua.pojo.Member"
+                     select="com.hwua.mapper.MemberMapper.queryMemberById"  column= "memberId" >
+        </association>
+        <collection property="travellers" javaType="list" ofType="traveller" select="com.hwua.mapper.TravellerMapper.queryTravellersById" column="id">
+
+        </collection>
+    </resultMap>
+
+    <update id="changeOrderStatus">
+        update orders set  orderStatus=#{status}  <where> id in (
+        <foreach collection="ids" item="id" separator="," open="" close="">
+            #{id}
+        </foreach>
+        )
+    </where>
+    </update>
+
+</mapper>

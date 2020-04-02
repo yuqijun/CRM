@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:命名空间+id来找到唯一的一条sql语句-->
+<mapper namespace="com.hwua.mapper.RoleMapper">
+<!--    查询所有角色-->
+    <select id="queryAllRole" resultType="com.hwua.pojo.Role" >
+        select id,roleName,roleDesc from role
+    </select>
+
+<!--查找一个用户具有几个角色-->
+    <select id="queryRoleByUserId" resultType="com.hwua.pojo.Role" >
+        select  rolename,roleDesc,userid,roleid from role  LEFT JOIN users_role  on role.id=users_role.roleid  where userid = #{id}
+    </select>
+
+    <delete id="deleteRoleById">
+        delete from role where id=#{id}
+    </delete>
+
+    <insert id="addRole">
+        insert into role  values(null,#{roleName},#{roleDesc})
+    </insert>
+
+</mapper>

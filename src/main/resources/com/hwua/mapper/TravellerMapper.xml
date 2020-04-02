@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:命名空间+id来找到唯一的一条sql语句-->
+<mapper namespace="com.hwua.mapper.TravellerMapper">
+<!--    查询所有日志记录-->
+    <select id="queryTravellersById" resultType="com.hwua.pojo.Traveller" >
+        select o.id,orderNum,orderTime,peopleCount,orderDesc,payType,orderStatus,productId,memberId,ot.orderID,ot.travellerid,m.name,nickName,m.phoneNum,email,
+t.name,t.sex,t.phoneNum,t.credentialsType,t.credentialsNum,t.travellerType
+ from orders o
+left join order_traveller ot
+on o.id = ot.orderID
+left join member m
+on o.memberId = m.id
+left join traveller t
+on ot.travellerId = t.id
+where o.id=#{id}
+    </select>
+
+</mapper>

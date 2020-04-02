@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace:命名空间+id来找到唯一的一条sql语句-->
+<mapper namespace="com.hwua.mapper.LogMapper">
+<!--    查询所有日志记录-->
+    <select id="queryAllLog" resultType="com.hwua.pojo.Log" >
+        select  id,visitTime,username,ip,url,executionTime,method from syslog  order by visitTime desc
+    </select>
+
+
+    <insert id="saveLog">
+        insert into syslog values (UUID(),#{visitTime},#{userName},#{ip},#{url},#{executionTime},#{method})
+    </insert>
+</mapper>
